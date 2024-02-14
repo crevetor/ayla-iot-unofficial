@@ -389,3 +389,7 @@ class FujitsuHVAC(Device):
             raise SettingNotSupportedError("Device does not support vertical swing")
 
         await self.async_set_property_value(VERT_SWING_PARAM_MAP[self.model], SWING_VAL_MAP[self.model][val])
+
+    @property
+    def outdoor_temperature(self) -> float:
+        return _convert_sensed_temp_to_celsius(self.property_values["outdoor_temperature"])
