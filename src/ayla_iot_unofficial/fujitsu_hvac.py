@@ -8,7 +8,9 @@ from .device import Device, PropertyName, PropertyValue, AylaReadOnlyPropertyErr
 from .fujitsu_consts import (
     OEM_MODEL,
     PROP,
+    PROP2,
     DISPLAY_TEMP,
+    OUTDOOR_TEMP,
     DEVICE_NAME,
     DEVICE_CAPABILITIES,
     OPERATION_MODE,
@@ -129,7 +131,7 @@ class FujitsuHVAC(Device):
 
     async def async_update(self, props: list[str] | None=None):
         await super().async_update(props)
-        await self.refresh_sensed_temp()
+        await self.refresh_sensed_temps()
 
     def get_last_datapoint(self, property: str) -> dict[str, Any] | None:
         endpoint = self.set_property_endpoint(property)
@@ -172,9 +174,10 @@ class FujitsuHVAC(Device):
             count += 1
             await sleep(1)
 
-    async def refresh_sensed_temp(self):
+    async def refresh_sensed_temps(self):
         await self.async_set_property_value(PROP, 1, poll=True, keep_polling_value=1)
-        await super().async_update([DISPLAY_TEMP])
+        await self.async_set_property_value(PROP2, 1, poll=True, keep_polling_value=1)
+        await super().async_update([DISPLAY_TEMP, OUTDOOR_TEMP])
 
     @property
     def device_name(self) -> str:
