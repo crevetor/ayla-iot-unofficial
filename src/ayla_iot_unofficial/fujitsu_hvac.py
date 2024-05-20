@@ -199,8 +199,7 @@ class FujitsuHVAC(Device):
 
     async def refresh_sensed_temps(self):
         await self.async_set_property_value(PROP, 1, poll=True, keep_polling_value=1)
-        await self.async_set_property_value(PROP2, 1, poll=True, keep_polling_value=1)
-        await super().async_update([DISPLAY_TEMP, OUTDOOR_TEMP])
+        await super().async_update(DISPLAY_TEMP)
 
     @property
     def device_name(self) -> str:
